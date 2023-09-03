@@ -1,0 +1,37 @@
+.login_container {
+  background-color: white;
+  /* background-color:	#383838; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin: 200px auto;
+  display: flex;
+}
+
+.login_description {
+  background-image: url("/Users/joseysekine/Documents/programming_projects/Class-booking/Frontend/src/images/tokyo.jpg");
+  flex: 1;
+  background-size: cover;
+}
+
+.form_container {
+  background-color: white;
+  flex: 1;
+  margin: 200px auto;
+}
+
+.form_container h4 {
+  padding-left: 40%;
+}
+
+.form {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.form input {
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid #ababab;
+  padding: 10px;
+}

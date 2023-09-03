@@ -1,0 +1,130 @@
+
+/*
+.new_cards_input {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.new_cards_input h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.new_cards_input textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.new_cards_input select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.new_card_container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.add_plus_button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.add_plus_button:hover {
+  background-color: #0056b3;
+} */
+
+
+.new_card_container {
+  background-color: #393e46;
+  padding: 20px;
+  color: white;
+}
+
+.new_card_container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.new_cards_form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.new_cards_input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.new_cards_input h3 {
+  font-size: 18px;
+}
+
+textarea {
+  background-color: #222831;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+select {
+  background-color: #222831;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button.black_button {
+  background-color: #222831;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.black_button:hover {
+  background-color: #00adb5;
+}
+
+.add_plus_button {
+  background-color: #00adb5;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add_plus_button:hover {
+  background-color: #eeeeee;
+  color: #00adb5;
+}
