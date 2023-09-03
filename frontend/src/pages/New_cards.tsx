@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import styles from "./NewCards.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 
@@ -42,7 +42,6 @@ const CardElement: any = (props: {
   level: string;
   book: string;
 }) => {
-
   return (
     <div className={styles.new_cards_input}>
       <h3>{props.num}</h3>
@@ -98,7 +97,10 @@ const New_cards = () => {
   ]);
 
   const addInput = () => {
-    setInputs([...inputs, inputs[inputs.length]]);
+    setInputs([
+      ...inputs,
+      { sentence: "", meaning: "", level: "", grammar: "", book: "" },
+    ]);
   };
 
   const handleChange = (e: any, index: number) => {
@@ -111,7 +113,7 @@ const New_cards = () => {
   const handleSubmitCards = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(inputs);
-    navigate(`/cards_modification?data=${JSON.stringify(inputs)}`)
+    navigate(`/cards_modification?data=${JSON.stringify(inputs)}`);
   };
 
   return (
