@@ -35,15 +35,42 @@ const Login = () => {
     }
   };
 
-  const submitHandler = (e: any) => {
+  const submitHandler = async (e: any) => {
     e.preventDefault();
 
-    if (password.current.value === auth.password && email.current.value === auth.email) {
+    // create account
+    if (!login) {
+      const response = await fetch("http://localhost:8080/register_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: "1111",
+          username: "Josey",
+          email: "bbb@com",
+          password: "111111",
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(`HTTP error! Status: ${response.status}`);
+      } else {
+        const data = await response.json();
+        console.log(data); // Log
+      }
+    } else {
+    }
+
+    if (
+      password.current.value === auth.password &&
+      email.current.value === auth.email
+    ) {
       console.log("got in");
       email.current = "";
       password.current = "";
       setLogin(false);
-      navigate('/dashbored')
+      navigate("/dashbored");
     } else {
       console.log("try again!");
     }
