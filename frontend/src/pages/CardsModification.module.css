@@ -36,3 +36,17 @@ h4 {
 .modify_sentence:hover {
   background-color: #f0f0f0;
 }
+
+.finishButton {
+  margin-top: 10px;
+}
+
+.edit_confirm_modal {
+
+}
+
+.edit_confirm_modal_buttons {
+  display: flex;
+  margin: 10px;
+  column-gap: 20px;
+}

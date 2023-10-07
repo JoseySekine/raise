@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Overlay from "../components/Overlay";
+import Modal from "../components/Modal";
 import styles from "./CardsModification.module.css";
 
 const color = [
@@ -29,6 +31,7 @@ const editNumDisplay = {
 
 function Cards_Modification() {
   const sentenceRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [colorIndex, setColorIndex] = useState(0);
   const [activeCardIndex, setActiveCardIndex] = useState(-1);
   const [matchNow, setMatchNow] = useState(false);
@@ -137,6 +140,10 @@ function Cards_Modification() {
     }
   };
 
+  const handleOpenModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
   const handleFinish = () => {
     // submit all the edit modification
     // console.log(matching);
@@ -194,7 +201,22 @@ function Cards_Modification() {
           );
         })}
       </div>
-      <button onClick={handleFinish}>Finish</button>
+      <button className={styles.finishButton} onClick={handleOpenModal}>
+        Finish
+      </button>
+      {modalOpen && (
+        <Overlay>
+          <Modal>
+            <div className={styles.edit_confirm_modal}>
+              <p>Are you you are finished with your editting?</p>
+              <div className={styles.edit_confirm_modal_buttons}>
+                <button onClick={handleFinish}>Finish Edit</button>
+                <button onClick={handleOpenModal}>No</button>
+              </div>
+            </div>
+          </Modal>
+        </Overlay>
+      )}
     </div>
   );
 }
