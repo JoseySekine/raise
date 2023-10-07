@@ -1,6 +1,7 @@
-
 import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Overlay from "../components/Overlay";
+import Modal from "../components/Modal";
 import styles from "./CardsModification.module.css";
 
 const color = [
@@ -14,20 +15,41 @@ const color = [
   "#40E0D0",
 ];
 
+const editNumDisplay = {
+  0: "",
+  1: "①",
+  2: "②",
+  3: "③",
+  4: "④",
+  5: "⑤",
+  6: "⑥",
+  7: "⑦",
+  8: "⑧",
+  9: "⑨",
+  10: "⑩",
+};
+
 function Cards_Modification() {
   const sentenceRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [colorIndex, setColorIndex] = useState(0);
   const [activeCardIndex, setActiveCardIndex] = useState(-1);
   const [matchNow, setMatchNow] = useState(false);
   const [matching, setMatching] = useState<
-    { index: number | null; main: string; translation: string }[]
-  >([{ index: null, main: "", translation: "" }]);
+    {
+      index: number | null;
+      editNum: number;
+      main: string;
+      translation: string;
+    }[]
+  >([{ index: null, editNum: 0, main: "", translation: "" }]);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const dataString = queryParams.get("data");
   const dataArray = JSON.parse(dataString || "[]");
 
+  // change the matching line
   const changeHtmlColor = (
     selection: any,
     selectedText: string,
@@ -37,25 +59,43 @@ function Cards_Modification() {
     // selected card is matching the editable index
     const range = selection?.getRangeAt(0);
     const span = document.createElement("span");
-    span.style.backgroundColor = color[colorIndex];
-    span.textContent = selectedText;
-    // insert new span html element and change the color
-    range?.deleteContents();
-    range?.insertNode(span);
+    let editNum: number = 0;
+
     if (main === "main") {
       matching[matching.length - 1].main = selectedText;
       matching[matching.length - 1].index = index;
+      let currentEdits = matching.filter((edit) => edit.index === index);
+      if (currentEdits[0].editNum === null) {
+        matching[matching.length - 1].editNum = 1;
+      } else {
+        let lastEdit: any = currentEdits.reduce((prev: any, current: any) => {
+          return prev.editNum > current.editNum ? prev : current;
+        });
+        matching[matching.length - 1].editNum = lastEdit.editNum + 1;
+        editNum = matching[matching.length - 1].editNum;
+      }
       setMatching(matching);
       setMatchNow(true);
-    } else if(main === 'translation') {
+    } else if (main === "translation") {
       matching[matching.length - 1].translation = selectedText;
+      editNum = matching[matching.length - 1].editNum;
       setMatching((prevMatching) => {
-        return [...prevMatching, { index: null, main: "", translation: "" }];
+        return [
+          ...prevMatching,
+          { index: null, editNum: 0, main: "", translation: "" },
+        ];
       });
       setMatchNow(false);
       setActiveCardIndex(-1);
       setColorIndex(colorIndex + 1 === color.length ? 0 : colorIndex + 1);
     }
+    span.style.backgroundColor = color[colorIndex];
+    span.textContent = `${
+      editNumDisplay[editNum as keyof typeof editNumDisplay]
+    }${selectedText}`;
+    // insert new span html element and change the color
+    range?.deleteContents();
+    range?.insertNode(span);
 
     // Clear the selection
     selection?.removeAllRanges();
@@ -98,8 +138,43 @@ function Cards_Modification() {
         }
       }
     }
+  };
 
-    console.log(matching);
+  const handleOpenModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  const handleFinish = () => {
+    // submit all the edit modification
+    // console.log(matching);
+    const finalData: any = [];
+    matching.pop();
+    matching.map((editData) => {
+      let exist: boolean = false;
+      finalData.map((data: any) => {
+        if (data.index === editData.index) {
+          exist = true;
+          data.edits.push({
+            editNum: editData.editNum,
+            main: editData.main,
+            translation: editData.translation,
+          });
+        }
+      });
+      if (!exist) {
+        finalData.push({
+          index: editData.index,
+          edits: [
+            {
+              editNum: editData.editNum,
+              main: editData.main,
+              translation: editData.translation,
+            },
+          ],
+        });
+      }
+      console.log(finalData);
+    });
   };
 
   return (
@@ -126,6 +201,22 @@ function Cards_Modification() {
           );
         })}
       </div>
+      <button className={styles.finishButton} onClick={handleOpenModal}>
+        Finish
+      </button>
+      {modalOpen && (
+        <Overlay>
+          <Modal>
+            <div className={styles.edit_confirm_modal}>
+              <p>Are you you are finished with your editting?</p>
+              <div className={styles.edit_confirm_modal_buttons}>
+                <button onClick={handleFinish}>Finish Edit</button>
+                <button onClick={handleOpenModal}>No</button>
+              </div>
+            </div>
+          </Modal>
+        </Overlay>
+      )}
     </div>
   );
 }
