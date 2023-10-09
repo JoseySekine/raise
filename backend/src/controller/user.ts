@@ -1,18 +1,29 @@
 import User from "../model/user";
+import { Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 
-export const postUser = async () => {
-  const user = new User({
-    id: "111",
-    username: "jose",
-    email: "aaa@com",
-    password: "messi",
-  });
+export const registerUser = async (req: Request, res: Response) => {
+  const username: string | undefined = (req.body as { username?: string })
+    .username;
+  const email: string | undefined = (req.body as { email?: string }).email;
+  const password: string | undefined = (req.body as { password?: string })
+    .password;
+  const id: string = uuidv4();
 
-  const result = await user.save();
-  console.log(result);
+  try {
+    if (username && email && password) {
+      const newUser = new User({
+        id: id,
+        username: username,
+        email: email,
+        password: password,
+      });
 
+      await newUser.save()
+
+      res.status(200).send("OK");
+    }
+  } catch {
+    res.status(500).send("Internal Server Error");
+  }
 };
-
-export const registerUser = async () => {
-  console.log('called register user page');
-}

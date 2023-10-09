@@ -2,6 +2,8 @@ import { Fragment, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import InputField from "../components/Input-field";
 import classes from "./Login.module.css";
+import Overlay from "../components/Overlay";
+import Modal from "../components/Modal";
 
 const auth = {
   email: "aaa@com",
@@ -9,13 +11,21 @@ const auth = {
 };
 
 const Login = () => {
-  const [login, setLogin] = useState(true);
+  const [loginMode, setLoginMode] = useState(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const email: any = useRef("");
   const password: any = useRef("");
+  const username: any = useRef("");
   const navigate = useNavigate();
 
   const field: any = [
-    { name: "mail", type: "mail", placeholder: "Address", ref: email },
+    {
+      name: "username",
+      type: "text",
+      placeholder: "Username",
+      ref: username,
+    },
+    { name: "mail", type: "mail", placeholder: "Email address", ref: email },
     {
       name: "password",
       type: "password",
@@ -24,32 +34,38 @@ const Login = () => {
     },
   ];
 
-  const changeInput = (e: any) => {
-    const { name, value } = e.target;
+  // const changeInput = (e: any) => {
+  //   const { name, value } = e.target;
 
-    switch (name) {
-      case "mail":
-        return (email.current = value);
-      case "password":
-        return (password.current = value);
-    }
-  };
+  //   switch (name) {
+  //     case "mail":
+  //       return (email.current = value);
+  //     case "password":
+  //       return (password.current = value);
+  //     case "username":
+  //       return (username.current = value);
+  //   }
+  // };
 
-  const submitHandler = async (e: any) => {
+  const registerHandler = async (e: any) => {
     e.preventDefault();
 
-    // create account
-    if (!login) {
+    console.log(
+      email.current.value,
+      username.current.value,
+      password.current.value
+    );
+
+    if (email && username && password) {
       const response = await fetch("http://localhost:8080/register_user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: "1111",
-          username: "Josey",
-          email: "bbb@com",
-          password: "111111",
+          username: username.current.value,
+          email: email.current.value,
+          password: password.current.value,
         }),
       });
 
@@ -57,11 +73,15 @@ const Login = () => {
         console.error(`HTTP error! Status: ${response.status}`);
       } else {
         const data = await response.json();
-        console.log(data); // Log
+        console.log(data);
+        console.log("Created your account!");
       }
-    } else {
     }
+    setLoginMode(true);
+    setModalOpen(false);
+  };
 
+  const loginHandler = () => {
     if (
       password.current.value === auth.password &&
       email.current.value === auth.email
@@ -69,16 +89,11 @@ const Login = () => {
       console.log("got in");
       email.current = "";
       password.current = "";
-      setLogin(false);
+      setLoginMode(false);
       navigate("/dashbored");
     } else {
       console.log("try again!");
     }
-  };
-
-  const handelMode = (e: any) => {
-    e.preventDefault();
-    setLogin(!login);
   };
 
   return (
@@ -86,8 +101,8 @@ const Login = () => {
       <div className={classes["login_container"]}>
         <div className={classes["login_description"]}></div>
         <div className={classes["form_container"]}>
-          {login ? <h4>Create account</h4> : <h4>Login account</h4>}
-          <form onSubmit={submitHandler} className={classes["form"]}>
+          {loginMode ? <h4>Login account</h4> : <h4>Create account</h4>}
+          <form onSubmit={loginHandler} className={classes["form"]}>
             {field.map((data: any, index: number) => {
               return (
                 <InputField
@@ -100,13 +115,61 @@ const Login = () => {
                 />
               );
             })}
-            <button>{login ? "Sign in" : "Login"}</button>
-            <button onClick={handelMode}>
-              {login ? "Login account" : "Create account"}
-            </button>
+            <div className={classes.register_login_buttons}>
+              {loginMode ? (
+                <button>Login</button>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setModalOpen(true);
+                  }}
+                >
+                  Sign in
+                </button>
+              )}
+              {loginMode ? (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLoginMode(false);
+                  }}
+                >
+                  Sign in Mode
+                </button>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLoginMode(true);
+                  }}
+                >
+                  Login Mode
+                </button>
+              )}
+            </div>
           </form>
         </div>
       </div>
+      {modalOpen && (
+        <Overlay>
+          <Modal>
+            <p>Please confirm your details</p>
+            <p>Username : {username.current.value}</p>
+            <p>Email Address : {email.current.value}</p>
+            <div className={classes.modal_confirm_buttons}>
+              <button onClick={registerHandler}>Confirm</button>
+              <button
+                onClick={() => {
+                  setModalOpen(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </Modal>
+        </Overlay>
+      )}
     </Fragment>
   );
 };
