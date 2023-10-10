@@ -1,4 +1,4 @@
-.dashbored_container {
+.dashboard_container {
   background-color: #393e46;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
@@ -9,17 +9,17 @@
   color: white;
 }
 
-.dashbored_container a {
+.dashboard_container a {
   color: white;
 }
 
-.dashbored_icon {
+.dashboard_icon {
   border-radius: 50%;
   width: 40%;
   margin: auto;
 }
 
-.dashbored_display {
+.dashboard_display {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -27,11 +27,11 @@
   text-align: center;
 }
 
-.dashbored_display button{
+.dashboard_display button{
   margin: 10px;
 }
 
-.dashbored_activities {
+.dashboard_activities {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@
   margin: 50px auto;
 }
 
-.dashbored_record {
+.dashboard_record {
   width: 80%;
   border-radius: 15px;
   box-shadow: #f0d879 0px 1px 4px, #f0d879 0px 0px 0px 3px;
@@ -47,12 +47,12 @@
   margin: auto;
 }
 
-.dashbored_record:hover {
+.dashboard_record:hover {
   color: #45b7b8;
   box-shadow: #45b7b8 0px 1px 4px, #45b7b8 0px 0px 0px 3px;
 }
 
-.dashbored_activity {
+.dashboard_activity {
   width: 80%;
   box-shadow: #f0d879 0px 1px 4px, #f0d879 0px 0px 0px 3px;
   border-radius: 15px;
@@ -61,7 +61,7 @@
   text-align: center;
 }
 
-.dashbored_activity:hover {
+.dashboard_activity:hover {
   /* opacity: 0.5; */
   color: #45b7b8;
   box-shadow: #45b7b8 0px 1px 4px, #45b7b8 0px 0px 0px 3px;
