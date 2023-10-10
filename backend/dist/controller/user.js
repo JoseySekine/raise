@@ -12,24 +12,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.loginUser = exports.registerUser = void 0;
 const user_1 = __importDefault(require("../model/user"));
 const uuid_1 = require("uuid");
-const registerUser = (req) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body
         .username;
     const email = req.body.email;
     const password = req.body
         .password;
     const id = (0, uuid_1.v4)();
-    if (username && email && password) {
-        const newUser = new user_1.default({
-            id: id,
-            username: username,
-            email: email,
-            password: password,
-        });
-        console.log(newUser);
+    try {
+        if (username && email && password) {
+            const newUser = new user_1.default({
+                id: id,
+                username: username,
+                email: email,
+                password: password,
+            });
+            yield newUser.save();
+            res.status(200).send("OK");
+        }
+    }
+    catch (_a) {
+        res.status(500).send("Internal Server Error");
     }
 });
 exports.registerUser = registerUser;
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const password = req.body
+        .password;
+    const user = yield user_1.default.find({ email: email, password: password });
+    try {
+        if (user) {
+            console.log(user);
+            res.status(200).send("ok");
+        }
+    }
+    catch (_b) {
+        res.status(400).send("Internal Server Error");
+    }
+});
+exports.loginUser = loginUser;

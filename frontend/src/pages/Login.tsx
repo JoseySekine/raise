@@ -5,11 +5,6 @@ import classes from "./Login.module.css";
 import Overlay from "../components/Overlay";
 import Modal from "../components/Modal";
 
-const auth = {
-  email: "aaa@com",
-  password: "messi",
-};
-
 const Login = () => {
   const [loginMode, setLoginMode] = useState(true);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -33,19 +28,6 @@ const Login = () => {
       ref: password,
     },
   ];
-
-  // const changeInput = (e: any) => {
-  //   const { name, value } = e.target;
-
-  //   switch (name) {
-  //     case "mail":
-  //       return (email.current = value);
-  //     case "password":
-  //       return (password.current = value);
-  //     case "username":
-  //       return (username.current = value);
-  //   }
-  // };
 
   const registerHandler = async (e: any) => {
     e.preventDefault();
@@ -81,18 +63,30 @@ const Login = () => {
     setModalOpen(false);
   };
 
-  const loginHandler = () => {
-    if (
-      password.current.value === auth.password &&
-      email.current.value === auth.email
-    ) {
-      console.log("got in");
+  const loginHandler = async (e: any) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:8080/login_user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.current.value,
+        password: password.current.value,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`HTTP error! Status: ${response.status}`);
+      console.log("Login failed!");
+    } else {
+      navigate("/dashboard");
+      const data = await response.json();
       email.current = "";
       password.current = "";
+      console.log("Login successful!");
       setLoginMode(false);
-      navigate("/dashbored");
-    } else {
-      console.log("try again!");
     }
   };
 
@@ -106,7 +100,6 @@ const Login = () => {
             {field.map((data: any, index: number) => {
               return (
                 <InputField
-                  // onChange={changeInput}
                   dataRef={data.ref}
                   key={index}
                   name={data.name}
