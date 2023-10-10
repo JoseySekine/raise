@@ -35,3 +35,9 @@
   border-bottom: 2px solid #ababab;
   padding: 10px;
 }
+
+.modal_confirm_buttons,.register_login_buttons {
+  display: flex;
+  margin: 10px;
+  column-gap: 20px;
+}

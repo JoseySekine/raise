@@ -13,7 +13,10 @@ const port = 8080;
 
 const url: string = process.env.MONGODB ?? "";
 
+
 app.use(cors())
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });

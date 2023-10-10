@@ -15,6 +15,7 @@ const app = (0, express_1.default)();
 const port = 8080;
 const url = (_a = process.env.MONGODB) !== null && _a !== void 0 ? _a : "";
 app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
