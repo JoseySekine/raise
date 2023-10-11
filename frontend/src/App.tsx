@@ -3,6 +3,7 @@ import "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from './pages/Dashboard';
+import Settings from "./pages/Settings";
 import New_cards from "./pages/New_cards";
 import CardsModification from "./pages/CardsModification";
 
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
   },
   { path: "/new_cards", element: <New_cards /> },
   { path: "/cards_modification", element: <CardsModification /> },

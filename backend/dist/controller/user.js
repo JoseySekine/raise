@@ -16,11 +16,12 @@ exports.loginUser = exports.registerUser = void 0;
 const user_1 = __importDefault(require("../model/user"));
 const uuid_1 = require("uuid");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body
-        .username;
-    const email = req.body.email;
-    const password = req.body
-        .password;
+    // const username: string | undefined = (req.body as { username?: string })
+    //   .username;
+    // const email: string | undefined = (req.body as { email?: string }).email;
+    // const password: string | undefined = (req.body as { password?: string })
+    //   .password;
+    const { username, email, password } = req.body;
     const id = (0, uuid_1.v4)();
     try {
         if (username && email && password) {
@@ -31,7 +32,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 password: password,
             });
             yield newUser.save();
-            res.status(200).send("OK");
+            res.status(200).json({ message: "Registration successful" });
         }
     }
     catch (_a) {
@@ -40,9 +41,10 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const password = req.body
-        .password;
+    // const email: string | undefined = (req.body as { email?: string }).email;
+    // const password: string | undefined = (req.body as { password?: string })
+    //   .password;
+    const { email, password } = req.body;
     const user = yield user_1.default.find({ email: email, password: password });
     try {
         if (user) {

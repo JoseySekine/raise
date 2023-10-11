@@ -32,12 +32,6 @@ const Login = () => {
   const registerHandler = async (e: any) => {
     e.preventDefault();
 
-    console.log(
-      email.current.value,
-      username.current.value,
-      password.current.value
-    );
-
     if (email && username && password) {
       const response = await fetch("http://localhost:8080/register_user", {
         method: "POST",
@@ -54,12 +48,11 @@ const Login = () => {
       if (!response.ok) {
         console.error(`HTTP error! Status: ${response.status}`);
       } else {
-        const data = await response.json();
-        console.log(data);
-        console.log("Created your account!");
+        // const data = await response.json();
+        console.log(`Created account! ${response.status}`);
+        setLoginMode(true);
       }
     }
-    setLoginMode(true);
     setModalOpen(false);
   };
 
@@ -79,10 +72,9 @@ const Login = () => {
 
     if (!response.ok) {
       console.error(`HTTP error! Status: ${response.status}`);
-      console.log("Login failed!");
     } else {
       navigate("/dashboard");
-      const data = await response.json();
+      // const data = await response.json();
       email.current = "";
       password.current = "";
       console.log("Login successful!");

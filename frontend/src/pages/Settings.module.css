@@ -1,0 +1,29 @@
+.settings_container {
+  background-color: #393e46;
+  /* margin: 200px; */
+  /* padding: 10px; */
+  margin: 200px auto;
+  width: 80%;
+  padding: 30px;
+}
+
+.form_container {
+  width: 80%;
+  margin: auto;
+  background-color: white;
+}
+
+.form {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  padding-bottom: 20px;
+}
+
+.form input {
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid #ababab;
+  padding: 10px;
+}
