@@ -1,8 +1,7 @@
 .login_container {
   background-color: white;
-  /* background-color:	#383838; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin: 200px auto;
+  margin: 200px 200px;
   display: flex;
 }
 

@@ -1,9 +1,12 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useContext } from "react";
+import { LightModeContext } from "../context";
 import { useNavigate } from "react-router";
 import InputField from "../components/Input-field";
-import classes from "./Login.module.css";
+import LightChangeButton from "../components/LightChangeButton";
 import Overlay from "../components/Overlay";
 import Modal from "../components/Modal";
+
+import styles from "./Login.module.css";
 
 const Login = () => {
   const [loginMode, setLoginMode] = useState(true);
@@ -13,30 +16,35 @@ const Login = () => {
   const username: any = useRef("");
   const navigate = useNavigate();
 
+  // context
+  const { lightMode, toggleLightMode } = useContext(LightModeContext);
+
   const field: any = [
     {
       name: "username",
       type: "text",
       placeholder: "Username",
       ref: username,
+      value: username.current.value,
     },
-    { name: "mail", type: "mail", placeholder: "Email address", ref: email },
+    {
+      name: "mail",
+      type: "mail",
+      placeholder: "Email address",
+      ref: email,
+      value: email.current.value,
+    },
     {
       name: "password",
       type: "password",
       placeholder: "Password",
       ref: password,
+      value: password.current.value,
     },
   ];
 
   const registerHandler = async (e: any) => {
     e.preventDefault();
-
-    console.log(
-      email.current.value,
-      username.current.value,
-      password.current.value
-    );
 
     if (email && username && password) {
       const response = await fetch("http://localhost:8080/register_user", {
@@ -54,12 +62,11 @@ const Login = () => {
       if (!response.ok) {
         console.error(`HTTP error! Status: ${response.status}`);
       } else {
-        const data = await response.json();
-        console.log(data);
-        console.log("Created your account!");
+        // const data = await response.json();
+        console.log(`Created account! ${response.status}`);
+        setLoginMode(true);
       }
     }
-    setLoginMode(true);
     setModalOpen(false);
   };
 
@@ -79,10 +86,9 @@ const Login = () => {
 
     if (!response.ok) {
       console.error(`HTTP error! Status: ${response.status}`);
-      console.log("Login failed!");
     } else {
       navigate("/dashboard");
-      const data = await response.json();
+      // const data = await response.json();
       email.current = "";
       password.current = "";
       console.log("Login successful!");
@@ -92,23 +98,25 @@ const Login = () => {
 
   return (
     <Fragment>
-      <div className={classes["login_container"]}>
-        <div className={classes["login_description"]}></div>
-        <div className={classes["form_container"]}>
+      <LightChangeButton lightMode={lightMode} onClick={toggleLightMode} />
+      <div className={styles["login_container"]}>
+        <div className={styles["login_description"]}></div>
+        <div className={styles["form_container"]}>
           {loginMode ? <h4>Login account</h4> : <h4>Create account</h4>}
-          <form onSubmit={loginHandler} className={classes["form"]}>
+          <form onSubmit={loginHandler} className={styles["form"]}>
             {field.map((data: any, index: number) => {
               return (
                 <InputField
-                  dataRef={data.ref}
+                  dataref={data.ref}
                   key={index}
                   name={data.name}
                   type={data.type}
                   placeholder={data.placeholder}
+                  value={data.value}
                 />
               );
             })}
-            <div className={classes.register_login_buttons}>
+            <div className={styles.register_login_buttons}>
               {loginMode ? (
                 <button>Login</button>
               ) : (
@@ -150,7 +158,7 @@ const Login = () => {
             <p>Please confirm your details</p>
             <p>Username : {username.current.value}</p>
             <p>Email Address : {email.current.value}</p>
-            <div className={classes.modal_confirm_buttons}>
+            <div className={styles.modal_confirm_buttons}>
               <button onClick={registerHandler}>Confirm</button>
               <button
                 onClick={() => {

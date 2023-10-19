@@ -1,10 +1,24 @@
-/* *{
-  background-color: #072e3a;
-} */
-
 body {
-  /* background-color: #072e3a; */
+  background-color: var(--background-color, white);
+  transition: background-color 0.5s;
+}
+
+.dark_theme {
+  background-color: #393e46;
+  transition: background-color 0.5s;
+}
+
+.form_container {
   background-color: white;
+  flex: 1;
+  margin: 200px auto;
+}
+
+.form {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
 }
 
 button {
