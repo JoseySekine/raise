@@ -12,15 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.registerUser = void 0;
+exports.editUserInfo = exports.getUserData = exports.loginUser = exports.registerUser = void 0;
 const user_1 = __importDefault(require("../model/user"));
 const uuid_1 = require("uuid");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const username: string | undefined = (req.body as { username?: string })
-    //   .username;
-    // const email: string | undefined = (req.body as { email?: string }).email;
-    // const password: string | undefined = (req.body as { password?: string })
-    //   .password;
     const { username, email, password } = req.body;
     const id = (0, uuid_1.v4)();
     try {
@@ -41,9 +36,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const email: string | undefined = (req.body as { email?: string }).email;
-    // const password: string | undefined = (req.body as { password?: string })
-    //   .password;
     const { email, password } = req.body;
     const user = yield user_1.default.find({ email: email, password: password });
     try {
@@ -57,3 +49,37 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.loginUser = loginUser;
+const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authHeader = req.get("Authorization");
+    const email = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(" ")[1];
+    // const {email, password} = req.body as {email: "string"; password: string};
+    const user = yield user_1.default.findOne({ email: email });
+    try {
+        if (user) {
+            res.status(200).json(user);
+        }
+    }
+    catch (_c) {
+        res.status(400).json({ message: "Cannot find user" });
+    }
+});
+exports.getUserData = getUserData;
+const editUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, email, password, oldPassword, oldEmail } = req.body;
+    let user = yield user_1.default.findOne({ email: oldEmail, password: oldPassword });
+    if (!user) {
+        return res.status(404).json({ error: "User not found" });
+    }
+    user.username = username;
+    user.email = email;
+    user.password = password;
+    try {
+        yield user.save();
+        console.log(user);
+        res.status(200).json({ message: "User information updated successfully" });
+    }
+    catch (_d) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.editUserInfo = editUserInfo;
