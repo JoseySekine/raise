@@ -37,11 +37,11 @@ export const loginUser = async (req: Request, res: Response) => {
     if (user && user?.password === password) {
       console.log(user);
       res.status(200).json({ message: "Login successful!" });
-    }else{
-      console.log('user not found')
-      throw new Error ('User not found')
+    } else {
+      console.log("user not found");
+      throw new Error("User not found");
     }
-  } catch(e : unknown) {
+  } catch (e: unknown) {
     res.status(400).json({ message: e });
   }
 };
