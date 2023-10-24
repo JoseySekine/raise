@@ -12,8 +12,12 @@
   margin: auto;
   background-color: white;
   border-radius: 15px;
+
 }
 
+.form_container > h2 {
+  margin-left: 15px;
+}
 .form {
   margin: 10px;
   display: flex;

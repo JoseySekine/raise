@@ -30,14 +30,19 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body as { email: string; password: string };
-  const user = await User.find({ email: email, password: password });
+  console.log(email, password);
   try {
-    if (user) {
+    const user = await User.findOne({ email });
+
+    if (user && user?.password === password) {
       console.log(user);
-      res.status(200).send("ok");
+      res.status(200).json({ message: "Login successful!" });
+    }else{
+      console.log('user not found')
+      throw new Error ('User not found')
     }
-  } catch {
-    res.status(400).send("Internal Server Error");
+  } catch(e : unknown) {
+    res.status(400).json({ message: e });
   }
 };
 

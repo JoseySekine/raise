@@ -1,7 +1,7 @@
 import { Fragment, useState, useRef, useContext } from "react";
 import { LightModeContext } from "../context";
 import { useNavigate } from "react-router";
-import InputField from "../components/Input-field";
+import InputFieldState from "../components/inputs/InputFieldState";
 import LightChangeButton from "../components/LightChangeButton";
 import Overlay from "../components/Overlay";
 import Modal from "../components/Modal";
@@ -25,21 +25,21 @@ const Login = () => {
       type: "text",
       placeholder: "Username",
       ref: username,
-      value: username.current.value,
+      // value: username.current.value,
     },
     {
       name: "mail",
       type: "mail",
       placeholder: "Email address",
       ref: email,
-      value: email.current.value,
+      // value: email.current.value,
     },
     {
       name: "password",
       type: "password",
       placeholder: "Password",
       ref: password,
-      value: password.current.value,
+      // value: password.current.value,
     },
   ];
 
@@ -72,6 +72,7 @@ const Login = () => {
 
   const loginHandler = async (e: any) => {
     e.preventDefault();
+    console.log(email.current.value, password.current.value);
 
     const response = await fetch("http://localhost:8080/login_user", {
       method: "POST",
@@ -84,11 +85,13 @@ const Login = () => {
       }),
     });
 
+    console.log(response.ok);
+
     if (!response.ok) {
+      alert("No user found with that email and password");
       console.error(`HTTP error! Status: ${response.status}`);
     } else {
       navigate("/dashboard");
-      // const data = await response.json();
       email.current = "";
       password.current = "";
       console.log("Login successful!");
@@ -106,13 +109,13 @@ const Login = () => {
           <form onSubmit={loginHandler} className={styles["form"]}>
             {field.map((data: any, index: number) => {
               return (
-                <InputField
-                  dataref={data.ref}
+                <InputFieldState
+                  dataRef={data.ref}
                   key={index}
                   name={data.name}
                   type={data.type}
                   placeholder={data.placeholder}
-                  value={data.value}
+                  // value={data.value}
                 />
               );
             })}

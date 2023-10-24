@@ -37,15 +37,20 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    const user = yield user_1.default.find({ email: email, password: password });
+    console.log(email, password);
     try {
-        if (user) {
+        const user = yield user_1.default.findOne({ email });
+        if (user && (user === null || user === void 0 ? void 0 : user.password) === password) {
             console.log(user);
-            res.status(200).send("ok");
+            res.status(200).json({ message: "Login successful!" });
+        }
+        else {
+            console.log('user not found');
+            throw new Error('User not found');
         }
     }
-    catch (_b) {
-        res.status(400).send("Internal Server Error");
+    catch (e) {
+        res.status(400).json({ message: e });
     }
 });
 exports.loginUser = loginUser;
@@ -59,14 +64,14 @@ const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             res.status(200).json(user);
         }
     }
-    catch (_c) {
+    catch (_b) {
         res.status(400).json({ message: "Cannot find user" });
     }
 });
 exports.getUserData = getUserData;
 const editUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password, oldPassword, oldEmail } = req.body;
-    let user = yield user_1.default.findOne({ email: oldEmail, password: oldPassword });
+    const user = yield user_1.default.findOne({ email: oldEmail, password: oldPassword });
     if (!user) {
         return res.status(404).json({ error: "User not found" });
     }
@@ -78,7 +83,7 @@ const editUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         console.log(user);
         res.status(200).json({ message: "User information updated successfully" });
     }
-    catch (_d) {
+    catch (_c) {
         res.status(500).json({ error: "Internal server error" });
     }
 });

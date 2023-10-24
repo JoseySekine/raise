@@ -1,17 +1,16 @@
 import React, { Fragment } from "react";
 
-const InputField: React.FC<{
-  onChange?: (e: any) => any;
+const InputFieldState: React.FC<{
   name: string;
   type: string;
   placeholder: string;
-  value: string;
+  dataRef: string;
 }> = (props) => {
   return (
     <Fragment>
-      <input {...props}></input>
+      <input {...props} ref={props.dataRef}></input>
     </Fragment>
   );
 };
 
-export default InputField;
+export default InputFieldState;
